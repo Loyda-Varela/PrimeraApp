@@ -38,30 +38,42 @@ public class ActivityConsulta extends AppCompatActivity {
 //creamos el metodo llamar empleados
     private void BuscarEmpleado() {
 
-        SQLiteDatabase db = conexion.getWritableDatabase();
-        //parametros de Busqueda de la sentencia select
+        try {
+            SQLiteDatabase db = conexion.getWritableDatabase();
+            //parametros de Busqueda de la sentencia select
 
-        String [] params = {id.getText().toString()};
-        //campos a retornar de a sentencia selct
-        String[] fields = {Transacciones.nombres,
-                           Transacciones.apellidos,
-                           Transacciones.edad,
-                           Transacciones.correo};
+            String [] params = {id.getText().toString()};
+            //campos a retornar de a sentencia selct
+            String[] fields = {Transacciones.nombres,
+                    Transacciones.apellidos,
+                    Transacciones.edad,
+                    Transacciones.correo};
 
-        //wer condition
-        String whereCondition = Transacciones.id + "=?";
-        //cursores
-        Cursor cdata = db.query(Transacciones.tablaEmmpleados, fields,
-                whereCondition,params,null,null,null);
-        cdata.moveToFirst();
-        //llenarlo
+            //wer condition
+            String whereCondition = Transacciones.id + "=?";
+            //cursores
+            Cursor cdata = db.query(Transacciones.tablaEmmpleados, fields,
+                    whereCondition,params,null,null,null);
+            cdata.moveToFirst();
 
-        nombres.setText(cdata.getString(0));
-        apellidos.setText(cdata.getString(1));
-        edad.setText(cdata.getString(2));
-        correo.setText(cdata.getString(3));
-        //mostrar mensaje
-        Toast.makeText(getApplicationContext(),"Consulta con exito !!",Toast.LENGTH_LONG).show();
+            if(cdata.getColumnCount()>0){
+                nombres.setText(cdata.getString(0));
+                apellidos.setText(cdata.getString(1));
+                edad.setText(cdata.getString(2));
+                correo.setText(cdata.getString(3));
+                //mostrar mensaje
+                Toast.makeText(getApplicationContext(),"Consulta con exito !!",Toast.LENGTH_LONG).show();
+
+            }
+            else {
+
+                Toast.makeText(getApplicationContext(),"No hay Datos !!",Toast.LENGTH_LONG).show();
+            }
+
+        }
+        catch (Exception ex){
+            Toast.makeText(getApplicationContext(),"Ha ocurrido un incomveniente !!",Toast.LENGTH_LONG).show();
+        }
 
     }
 
